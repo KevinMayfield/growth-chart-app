@@ -126,3 +126,9 @@ From a console in the project directory, execute:
 npm install
 npm start
 ```
+
+```
+docker build -t thorlogic/growth-chart .
+
+docker push thorlogic/growth-chart
+```
