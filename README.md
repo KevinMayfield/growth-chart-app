@@ -1,3 +1,9 @@
+docker build . -t thorlogic/growth-chart
+
+docker tag thorlogic/growth-chart thorlogic/growth-chart:stable
+
+docker push thorlogic/growth-chart
+
 SMART Pediatric Growth Chart
 --------------------------------------------------------------------------------
 
