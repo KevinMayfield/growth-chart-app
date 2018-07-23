@@ -238,7 +238,7 @@ GC.get_data = function() {
                                 'http://snomed.info/sct|248334005' , // Body height --lying
                                 'http://snomed.info/sct|169876006' , // headC
                                 'http://snomed.info/sct|363812007' , // headC
-                                'http://snomed.info/sct|446974000', // BMI 39156-5
+                                'http://snomed.info/sct|60621009', // BMI 39156-5
                                 'http://snomed.info/sct|896691000000102', // BMI 39156-5
                                 'http://snomed.info/sct|412726003', // gestAge
                                 'http://loinc.org|37362-1', // bone age
