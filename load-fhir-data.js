@@ -125,7 +125,7 @@ GC.get_data = function() {
 
             function process(observationValues, toUnit, arr){
                 observationValues && observationValues.forEach(function(v){
-                    if (isValidObservationObj(v)) {
+                    if (isValidObservationObj(v) && v.effectiveDateTime !== undefined) {
                         arr.push({
                             agemos: months(v.effectiveDateTime, patient.birthDate),
                             value: toUnit(v.valueQuantity)
@@ -147,11 +147,12 @@ GC.get_data = function() {
             p.demographics.birthday = patient.birthDate;
             p.demographics.gender = patient.gender;
 
-            var gestAge = vitalsByCode['18185-9'];
-            if (gestAge === undefined) {
+            var gestAge = vitalsByCode['412726003'];
+
+           /* if (gestAge === undefined) {
                 //handle an alternate mapping of Gest Age used by Cerner
                 gestAge = vitalsByCode['11884-4'];
-            }
+            } */
 
             if (gestAge && gestAge.length > 0) {
                 var weeks = 0,
@@ -179,12 +180,14 @@ GC.get_data = function() {
             }
 
             var units = smart.units;
-            process(vitalsByCode['3141-9' ], units.kg , p.vitals.weightData);
-            process(vitalsByCode['29463-7'], units.kg , p.vitals.weightData);
-            process(vitalsByCode['8302-2' ], units.cm , p.vitals.lengthData);
-            process(vitalsByCode['8306-3' ], units.cm , p.vitals.lengthData);
-            process(vitalsByCode['8287-5' ], units.cm , p.vitals.headCData );
-            process(vitalsByCode['39156-5'], units.any, p.vitals.BMIData   );
+            process(vitalsByCode['27113001' ], units.kg , p.vitals.weightData);
+            process(vitalsByCode['364589006'], units.kg , p.vitals.weightData);
+            process(vitalsByCode['50373000' ], units.cm , p.vitals.lengthData);
+            process(vitalsByCode['248334005' ], units.cm , p.vitals.lengthData);
+            process(vitalsByCode['169876006' ], units.cm , p.vitals.headCData );
+            process(vitalsByCode['363812007' ], units.cm , p.vitals.headCData );
+            process(vitalsByCode['446974000'], units.any, p.vitals.BMIData   );
+            process(vitalsByCode['896691000000102'], units.any, p.vitals.BMIData   );
 
             processBoneAge(vitalsByCode['37362-1'], p.boneAge, units);
 
@@ -229,15 +232,17 @@ GC.get_data = function() {
                     query: {
                         code: {
                             $or: [
-                                'http://loinc.org|29463-7', // weight
-                                'http://loinc.org|3141-9' , // weight
-                                'http://loinc.org|8302-2' , // Body height
-                                'http://loinc.org|8306-3' , // Body height --lying
-                                'http://loinc.org|8287-5' , // headC
-                                'http://loinc.org|39156-5', // BMI 39156-5
-                                'http://loinc.org|18185-9', // gestAge
+                                'http://snomed.info/sct|27113001', // weight
+                                'http://snomed.info/sct|364589006' , // weight
+                                'http://snomed.info/sct|50373000' , // Body height
+                                'http://snomed.info/sct|248334005' , // Body height --lying
+                                'http://snomed.info/sct|169876006' , // headC
+                                'http://snomed.info/sct|363812007' , // headC
+                                'http://snomed.info/sct|446974000', // BMI 39156-5
+                                'http://snomed.info/sct|896691000000102', // BMI 39156-5
+                                'http://snomed.info/sct|412726003', // gestAge
                                 'http://loinc.org|37362-1', // bone age
-                                'http://loinc.org|11884-4'  // gestAge
+                                //'http://loinc.org|11884-4'  // gestAge
                             ]
                         }
                     }
