@@ -186,8 +186,8 @@ GC.get_data = function() {
             process(vitalsByCode['248334005' ], units.cm , p.vitals.lengthData);
             process(vitalsByCode['169876006' ], units.cm , p.vitals.headCData );
             process(vitalsByCode['363812007' ], units.cm , p.vitals.headCData );
-            process(vitalsByCode['446974000'], units.any, p.vitals.BMIData   );
-            process(vitalsByCode['896691000000102'], units.any, p.vitals.BMIData   );
+            process(vitalsByCode['60621009'], units.any, p.vitals.BMIData   ); // This measurement not centile
+         //   process(vitalsByCode['896691000000102'], units.any, p.vitals.BMIData   );
 
             processBoneAge(vitalsByCode['37362-1'], p.boneAge, units);
 
