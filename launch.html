@@ -6,6 +6,13 @@
     <title>Growth Chart SMART Application</title>
     <script src="node_modules/fhirclient/fhir-client.js"></script>
     <script>
+      var clientId="fhir-smart-app-test";
+      var secret="mysecret";
+      var state = Math.round(Math.random()*100000000).toString();
+      sessionStorage[state] = JSON.stringify({
+        clientId: clientId,
+        secret: secret
+      });
       FHIR.oauth2.authorize({
         "client_id": "growth_chart",
         "scope":  "patient/*.read"
