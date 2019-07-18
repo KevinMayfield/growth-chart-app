@@ -67,6 +67,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var adapter = {
 	        defer: defer,
 	        http: function(args) {
+	           // KGM not here
 	            var ret = jquery.Deferred();
 	            var opts = {
 	                type: args.method,
@@ -77,6 +78,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                data: args.data || args.params,
 	                withCredentials: args.credentials === 'include',
 	            };
+
+
 	            jquery.ajax(opts)
 	                .done(function(data, status, xhr) {ret.resolve({data: data, status: status, headers: xhr.getResponseHeader, config: args});})
 	                .fail(function(err) {ret.reject({error: err, data: err, config: args});});
@@ -37985,13 +37988,17 @@ exports.createContext = Script.createContext = function (context) {
         defer: defer,
         http: function(args) {
             var ret = jquery.Deferred();
+            console.log("some other function");
+            console.log(args);
             var opts = {
                 type: args.method,
                 url: args.url,
+                crossDomain: true,
                 dataType: args.dataType || "json",
                 headers: args.headers || {},
                 data: args.data
             };
+            //jquery.ajaxSetup({headers: {"Ocp-Apim-Subscription-Key": "d2c2e06c928741c7a3aeaf89f3fc2cdb"}})
             jquery.ajax(opts)
                 .done(ret.resolve)
                 .fail(ret.reject);
@@ -38145,13 +38152,15 @@ function completeCodeFlow(params){
   };
 
   var headers = {};
-
+  console.log(state);
   if (state.client.secret) {
     headers['Authorization'] = 'Basic ' + btoa(state.client.client_id + ':' + state.client.secret);
   } else {
-    data['client_id'] = state.client.client_id;
+      console.log('hardcoding access auth');
+      headers['Authorization'] = 'Basic ' + btoa('fhir-smart-app-test:mysecret');
+    //data['client_id'] = state.client.client_id;
   }
-
+  console.log('POST TOKEN');
   Adapter.get().http({
     method: 'POST',
     url: state.provider.oauth2.token_uri,
@@ -38407,12 +38416,11 @@ function providers(fhirServiceUrl, provider, callback, errback){
     return;
   }
 
-    var headers = {};
-    headers['X-Wibble'] = 'Basic';
+    console.log('setting headers');
   Adapter.get().http({
     method: "GET",
-    url: stripTrailingSlash(fhirServiceUrl) + "/metadata",
-      headers: headers
+    url: stripTrailingSlash(fhirServiceUrl) + "/metadata"
+
   }).then(
     function(r){
       var res = {
@@ -38554,7 +38562,7 @@ BBClient.authorize = function(params, errback){
       window.location.href = client.redirect_uri + "?state="+encodeURIComponent(state);
       return;
     }
-    
+    console.log(params);
     sessionStorage[state] = JSON.stringify(params);
 
     console.log("sending client reg", params.client);
@@ -38577,11 +38585,11 @@ BBClient.authorize = function(params, errback){
 
 BBClient.resolveAuthType = function (fhirServiceUrl, callback, errback) {
     var headers = {};
-    headers['X-Wibble'] = 'Basic';
+
       Adapter.get().http({
          method: "GET",
          url: stripTrailingSlash(fhirServiceUrl) + "/metadata",
-          headers: headers
+          headers: {"Ocp-Apim-Subscription-Key": "d2c2e06c928741c7a3aeaf89f3fc2cdb"}
       }).then(function(r){
           var type = "none";
           
@@ -38684,7 +38692,8 @@ function FhirClient(p) {
         h = "Bearer " + server.auth.token;
       }
       if (!p.headers) {p.headers = {};}
-      p.headers['Authorization'] = h
+      p.headers['Authorization'] = h;
+      p.headers['Ocp-Apim-Subscription-Key'] ='d2c2e06c928741c7a3aeaf89f3fc2cdb';
       //p.beforeSend = function (xhr) { xhr.setRequestHeader ("Authorization", h); }
 
       return p;
