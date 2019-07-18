@@ -87,6 +87,17 @@ GC.get_data = function() {
         var hidePatientHeader = (smart.tokenResponse.need_patient_banner === false);
         SMART = smart;
 
+        console.log("ready called");
+
+        console.log(smart);
+
+        smart.server.headers = {
+            'X-Custom-Header': 'Custom Value',
+                'X-Another-Custom': 'Another Value'
+        };
+
+        console.log(smart);
+
         GC.Preferences.prop("hidePatientHeader", hidePatientHeader);
 
         function onData(patient, vitals, familyHistories) {
