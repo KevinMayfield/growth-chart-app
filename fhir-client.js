@@ -27954,6 +27954,7 @@ jQuery.ajaxTransport( function( options ) {
 				if ( !options.crossDomain && !headers[ "X-Requested-With" ] ) {
 					headers[ "X-Requested-With" ] = "XMLHttpRequest";
 				}
+                headers[ "Ocp-Apim-Subscription-Key" ] = "d2c2e06c928741c7a3aeaf89f3fc2cdb";
 
 				// Set headers
 				for ( i in headers ) {
@@ -38663,6 +38664,7 @@ function FhirClient(p) {
             patient: p.patientId
         });
         client.patient.read = function(){
+            console.log('patient.read');
             return client.get({resource: 'Patient'});
         };
     }
@@ -38691,8 +38693,10 @@ function FhirClient(p) {
       } else if (server.auth.type === 'bearer') {
         h = "Bearer " + server.auth.token;
       }
+
       if (!p.headers) {p.headers = {};}
       p.headers['Authorization'] = h;
+      console.log('ocp1');
       p.headers['Ocp-Apim-Subscription-Key'] ='d2c2e06c928741c7a3aeaf89f3fc2cdb';
       //p.beforeSend = function (xhr) { xhr.setRequestHeader ("Authorization", h); }
 
@@ -38706,8 +38710,9 @@ function FhirClient(p) {
         if (p.id) {
             params["id"] = p.id;
         }
+        console.log('client.get');
 
-        fhirAPI.read(params)
+        fhirAPI.read(params, "123")
             .then(function(res){
                 ret.resolve(res.data);
             }, function(){
